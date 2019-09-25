@@ -12,6 +12,39 @@ namespace application
       memberList.Add(member);
     }
 
+    public void deleteMember(int memberId)
+    {
+      Member member = memberExists(memberId);
+
+      memberList.RemoveAll(m => m.UniqueId == memberId);
+    }
+
+    // public Member editMember(int memberId)
+    // {
+    //   Member member = memberExists(memberId);
+    //   return member;
+    // }
+
+    public Member memberExists(int memberId)
+    {
+      Member member = memberList.Find(m => m.UniqueId == memberId);
+      if (member == null)
+      {
+        throw new Exception("Member not found");
+      }
+      return member;
+    }
+
+    public Member findMemberByName(string name)
+    {
+      Member member = memberList.Find(m => m.Name.Username == name);
+      if (member == null)
+      {
+        throw new Exception("Member not found");
+      }
+      return member;
+    }
+
     public string getVerboseList()
     {
       string output = "";
@@ -36,8 +69,8 @@ namespace application
         {
           output += $"Name: {member.Name.Username} Member ID: {member.UniqueId} Boats: ";
         }
+        return output;
       }
-      return output;
     }
   }
 }

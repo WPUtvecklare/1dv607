@@ -13,7 +13,7 @@ namespace application
 
       if (!newName.isValid())
       {
-        throw new ApplicationException("\n Ange ett namn mellan 3 och 15 bokstäver \n");
+        throw new ApplicationException("Ange ett namn mellan 3 och 15 bokstäver");
       }
       return newName;
     }
@@ -25,7 +25,7 @@ namespace application
 
       if (!newPin.isValid())
       {
-        throw new ApplicationException("\n Ange ett personnummer med 10 siffror \n");
+        throw new ApplicationException("Ange ett personnummer med 10 siffror");
       }
       return newPin;
     }
@@ -89,7 +89,6 @@ namespace application
       Member member = addMember(name, pin);
       members.addMember(member);
       MainView.printMessage("Successfully added a new member");
-      System.Console.WriteLine(members.ToString());
     }
 
     public int renderMemberListSelection()
@@ -133,6 +132,139 @@ namespace application
       {
         MainView.printMessage(e.Message);
       }
+    }
+
+    public int askWhichMemberToRemove()
+    {
+      int answer = 0;
+
+      if (listHasMembers())
+      {
+        MainView.print(members.getCompactList());
+        while (true)
+        {
+          try
+          {
+            answer = MainView.getMemberToRemove();
+            return answer;
+          }
+          catch (Exception e)
+          {
+            MainView.printMessage(e.Message);
+          }
+        }
+      }
+      else
+      {
+        return answer;
+      }
+    }
+
+    public bool listHasMembers()
+    {
+      try
+      {
+        members.getCompactList();
+        return true;
+      }
+      catch (Exception e)
+      {
+        MainView.printMessage(e.Message);
+        return false;
+      }
+    }
+
+    public void removeMember(int memberId)
+    {
+      try
+      {
+        if (listHasMembers())
+        {
+          members.deleteMember(memberId);
+          MainView.print("Successfully removed member with ID " + memberId);
+
+        }
+      }
+      catch (Exception e)
+      {
+        MainView.printMessage(e.Message);
+      }
+    }
+
+    public int askWhichMemberToEdit()
+    {
+      int answer = 0;
+
+      if (listHasMembers())
+      {
+        MainView.print(members.getCompactList());
+        while (true)
+        {
+          try
+          {
+            answer = MainView.getMemberToEdit();
+            return answer;
+          }
+          catch (Exception e)
+          {
+            MainView.printMessage(e.Message);
+          }
+        }
+      }
+      else
+      {
+        return answer;
+      }
+    }
+
+    public void changeMemberDetails(int memberId)
+    {
+      try
+      {
+        if (listHasMembers())
+        {
+          Member memberToEdit = members.memberExists(memberId);
+          MainView.print(memberToEdit.ToString());
+
+          Name newName = getName();
+          PersonalIdentification newPin = getPin();
+          memberToEdit.Name = newName;
+          memberToEdit.Pin = newPin;
+
+          MainView.print($"Member has successfully been edited to {newName.Username} and PIN: {newPin.Pin} ");
+        }
+      }
+      catch (Exception e)
+      {
+        MainView.printMessage(e.Message);
+      }
+    }
+
+    public Member findMember()
+    {
+      string name;
+      Member member;
+      while (true)
+      {
+        try
+        {
+          name = MainView.enterName();
+          member = members.findMemberByName(name);
+          return member;
+        }
+        catch (Exception e)
+        {
+          MainView.printMessage(e.Message);
+        }
+
+      }
+      // Member member = members.findMemberByName(memberName);
+      // MainView.print(member.showMemberProfile());
+    }
+
+    public void showMember(Member member)
+    {
+      MainView.print(member.showMemberProfile());
     }
   }
 }

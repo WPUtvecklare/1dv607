@@ -28,6 +28,22 @@ namespace application
         int listToShow = vm.renderMemberListSelection();
         vm.displayMemberList(listToShow);
       }
+      else if (choice == 3)
+      {
+        int memberId = vm.askWhichMemberToRemove();
+        vm.removeMember(memberId);
+      }
+      else if (choice == 4)
+      {
+        int memberId = vm.askWhichMemberToEdit();
+        vm.changeMemberDetails(memberId);
+      }
+      else if (choice == 5)
+      {
+        // string memberName = mv.enterName();
+        Member member = vm.findMember();
+        vm.showMember(member);
+      }
 
       run();
     }
