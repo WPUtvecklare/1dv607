@@ -12,12 +12,30 @@ namespace application
       memberList.Add(member);
     }
 
-    public override string ToString()
+    public string getVerboseList()
     {
       string output = "";
       foreach (var member in memberList)
       {
-        output += member.ToString();
+        output += $"Name: {member.Name.Username} Personal number: {member.Pin} Member ID: {member.UniqueId} Boats: ";
+      }
+      return output;
+    }
+
+    public string getCompactList()
+    {
+      string output = "";
+
+      if (memberList.Count == 0)
+      {
+        throw new ApplicationException("No members to show");
+      }
+      else
+      {
+        foreach (var member in memberList)
+        {
+          output += $"Name: {member.Name.Username} Member ID: {member.UniqueId} Boats: ";
+        }
       }
       return output;
     }

@@ -36,7 +36,7 @@ namespace application
       while (true)
       {
         choice = MainView.showMenu();
-        if (!(choice < 1 || choice > 4))
+        if (!(choice < 1 || choice > 5))
         {
           return choice;
         }
@@ -90,6 +90,49 @@ namespace application
       members.addMember(member);
       MainView.printMessage("Successfully added a new member");
       System.Console.WriteLine(members.ToString());
+    }
+
+    public int renderMemberListSelection()
+    {
+      int choice;
+      while (true)
+      {
+        try
+        {
+          choice = MainView.renderMemberListType();
+          if (!(choice < 1 || choice > 2))
+          {
+            return choice;
+          }
+          else
+          {
+            throw new ApplicationException("Inte ett giltigt värde");
+          }
+        }
+        catch (Exception e)
+        {
+          MainView.printMessage(e.Message);
+        }
+      }
+    }
+
+    public void displayMemberList(int choice)
+    {
+      try
+      {
+        if (choice == 1)
+        {
+          MainView.printMessage(members.getCompactList());
+        }
+        else
+        {
+          MainView.printMessage(members.getVerboseList());
+        }
+      }
+      catch (Exception e)
+      {
+        MainView.printMessage(e.Message);
+      }
     }
   }
 }

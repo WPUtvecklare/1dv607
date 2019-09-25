@@ -9,9 +9,10 @@ namespace application
       int number;
 
       Console.WriteLine("1. Add new member");
-      Console.WriteLine("2. Remove a member");
-      Console.WriteLine("3. Change a member's details");
-      Console.WriteLine("4. Exit");
+      Console.WriteLine("2. View all members");
+      Console.WriteLine("3. Remove a member");
+      Console.WriteLine("4. Change a member's details");
+      Console.WriteLine("5. Exit");
 
       number = int.Parse(Console.ReadLine());
       return number;
@@ -38,6 +39,17 @@ namespace application
     public void printMessage(string message)
     {
       Console.WriteLine(message);
+    }
+
+    public int renderMemberListType()
+    {
+      int number;
+
+      Console.WriteLine("1. Compact List");
+      Console.WriteLine("2. Verbose List");
+
+      number = int.Parse(Console.ReadLine());
+      return number;
     }
   }
 }

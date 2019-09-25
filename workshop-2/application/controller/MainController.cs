@@ -23,6 +23,11 @@ namespace application
       {
         vm.tryToAddMember();
       }
+      else if (choice == 2)
+      {
+        int listToShow = vm.renderMemberListSelection();
+        vm.displayMemberList(listToShow);
+      }
 
       run();
     }
