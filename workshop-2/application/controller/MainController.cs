@@ -5,16 +5,26 @@ namespace application
   class MainController
   {
     MainView mv = new MainView();
-    // Members members = new Members();
+    ViewModel vm = new ViewModel();
     public void run()
     {
-      int menuchoice = mv.showMenu();
+      int choice = 0;
 
-      if (menuchoice == 1)
+      try
       {
-        string name = mv.renderAddNewMember();
-        int pid = mv.personalID();
+        choice = vm.showMenu();
       }
+      catch (Exception e)
+      {
+        mv.printMessage(e.Message);
+      }
+
+      if (choice == 1)
+      {
+        vm.tryToAddMember();
+      }
+
+      run();
     }
   }
 }

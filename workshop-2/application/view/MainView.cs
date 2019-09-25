@@ -7,87 +7,37 @@ namespace application
     public int showMenu()
     {
       int number;
-      int firstChoice = 1;
-      int lastChoice = 4;
 
-      while (true)
-      {
-        try
-        {
-          Console.WriteLine("1. Add new member");
-          Console.WriteLine("2. Remove a member");
-          Console.WriteLine("3. Change a member's details");
-          Console.WriteLine("4. Exit");
+      Console.WriteLine("1. Add new member");
+      Console.WriteLine("2. Remove a member");
+      Console.WriteLine("3. Change a member's details");
+      Console.WriteLine("4. Exit");
 
-          number = int.Parse(Console.ReadLine());
-
-          if (!(number >= firstChoice && number <= lastChoice))
-          {
-            throw new ApplicationException();
-          }
-
-          if (number == 4)
-          {
-            Environment.Exit(0);
-          }
-          else
-          {
-            return number;
-          }
-        }
-        catch (Exception)
-        {
-          Console.WriteLine($"\n Ange ett heltal mellan {firstChoice} och {lastChoice}. \n");
-        }
-      }
+      number = int.Parse(Console.ReadLine());
+      return number;
     }
 
-    public string renderAddNewMember()
+    public string enterName()
     {
       string newName;
 
-      while (true)
-      {
-        try
-        {
-          Console.Write("Enter name: ");
-          newName = Console.ReadLine();
-
-          if (!(newName.Length >= 3 && newName.Length <= 15))
-          {
-            throw new ApplicationException();
-          }
-          return newName;
-        }
-        catch (Exception)
-        {
-          Console.WriteLine($"\n Ange ett namn mellan 3 och 15 bokstäver");
-        }
-      }
+      Console.Write("Enter name: ");
+      newName = Console.ReadLine();
+      return newName;
     }
 
-    public int personalID()
+    public string enterPin()
     {
-      int pin;
+      string pin;
 
-      while (true)
-      {
-        try
-        {
-          Console.Write("Enter personal number (10 numbers): ");
-          pin = int.Parse(Console.ReadLine());
+      Console.Write("Enter personal number (10 numbers): ");
+      pin = Console.ReadLine();
+      return pin;
+    }
 
-          if ((pin.ToString().Length != 10))
-          {
-            throw new ApplicationException();
-          }
-          return pin;
-        }
-        catch (Exception)
-        {
-          Console.WriteLine($"\n Ange ett personnummer med 10 siffror \n");
-        }
-      }
+    public void printMessage(string message)
+    {
+      Console.WriteLine(message);
     }
   }
 }
