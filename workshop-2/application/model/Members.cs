@@ -15,19 +15,13 @@ namespace application
     public void deleteMember(int memberId)
     {
       Member member = memberExists(memberId);
-
       memberList.RemoveAll(m => m.UniqueId == memberId);
     }
-
-    // public Member editMember(int memberId)
-    // {
-    //   Member member = memberExists(memberId);
-    //   return member;
-    // }
 
     public Member memberExists(int memberId)
     {
       Member member = memberList.Find(m => m.UniqueId == memberId);
+
       if (member == null)
       {
         throw new Exception("Member not found");
@@ -48,6 +42,12 @@ namespace application
     public string getVerboseList()
     {
       string output = "";
+
+      if (memberList.Count == 0)
+      {
+        throw new ApplicationException("No members to show");
+      }
+
       foreach (var member in memberList)
       {
         output += $"Name: {member.Name.Username} Personal number: {member.Pin} Member ID: {member.UniqueId} Boats: ";

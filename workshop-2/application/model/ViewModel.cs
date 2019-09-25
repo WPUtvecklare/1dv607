@@ -6,6 +6,7 @@ namespace application
   {
     private MainView MainView = new MainView();
     private Members members = new Members();
+    private BoatType boatType = new BoatType();
     public Name validateUsername()
     {
       string name = MainView.enterName();
@@ -36,7 +37,7 @@ namespace application
       while (true)
       {
         choice = MainView.showMenu();
-        if (!(choice < 1 || choice > 5))
+        if (!(choice < 1 || choice > 7))
         {
           return choice;
         }
@@ -121,11 +122,11 @@ namespace application
       {
         if (choice == 1)
         {
-          MainView.printMessage(members.getCompactList());
+          MainView.render(members.getCompactList());
         }
         else
         {
-          MainView.printMessage(members.getVerboseList());
+          MainView.render(members.getVerboseList());
         }
       }
       catch (Exception e)
@@ -134,18 +135,18 @@ namespace application
       }
     }
 
-    public int askWhichMemberToRemove()
+    public int askForMemberId()
     {
       int answer = 0;
 
       if (listHasMembers())
       {
-        MainView.print(members.getCompactList());
+        MainView.render(members.getCompactList());
         while (true)
         {
           try
           {
-            answer = MainView.getMemberToRemove();
+            answer = MainView.getMemberById();
             return answer;
           }
           catch (Exception e)
@@ -181,7 +182,7 @@ namespace application
         if (listHasMembers())
         {
           members.deleteMember(memberId);
-          MainView.print("Successfully removed member with ID " + memberId);
+          MainView.printMessage("Successfully removed member with ID " + memberId);
 
         }
       }
@@ -197,7 +198,7 @@ namespace application
 
       if (listHasMembers())
       {
-        MainView.print(members.getCompactList());
+        MainView.render(members.getCompactList());
         while (true)
         {
           try
@@ -224,14 +225,14 @@ namespace application
         if (listHasMembers())
         {
           Member memberToEdit = members.memberExists(memberId);
-          MainView.print(memberToEdit.ToString());
+          MainView.render(memberToEdit.ToString());
 
           Name newName = getName();
           PersonalIdentification newPin = getPin();
           memberToEdit.Name = newName;
           memberToEdit.Pin = newPin;
 
-          MainView.print($"Member has successfully been edited to {newName.Username} and PIN: {newPin.Pin} ");
+          MainView.printMessage($"Member has successfully been edited to {newName.Username} and PIN: {newPin.Pin} ");
         }
       }
       catch (Exception e)
@@ -256,15 +257,71 @@ namespace application
         {
           MainView.printMessage(e.Message);
         }
-
       }
-      // Member member = members.findMemberByName(memberName);
-      // MainView.print(member.showMemberProfile());
     }
 
     public void showMember(Member member)
     {
-      MainView.print(member.showMemberProfile());
+      MainView.render(member.showMemberProfile());
+    }
+
+    public int selectView()
+    {
+      int choice;
+      while (true)
+      {
+        choice = MainView.getWhichMemberToAssignABoat();
+        if (!(choice < 1 || choice > 2))
+        {
+          return choice;
+        }
+        else
+        {
+          throw new ApplicationException("Inte ett giltigt värde");
+        }
+      }
+    }
+
+    public int decideView(int number)
+    {
+      try
+      {
+        if (number == 1)
+        {
+          MainView.render(members.getCompactList());
+          int id = askForMemberId();
+          return id;
+        }
+        else if (number == 2)
+        {
+          Member member = findMember();
+          return member.UniqueId;
+        }
+
+      }
+      catch (Exception e)
+      {
+        MainView.printMessage(e.Message);
+      }
+      return number;
+    }
+
+    public int decideBoatType()
+    {
+      MainView.render(boatType.showBoatTypes());
+      int type = MainView.getBoatType();
+      return type;
+    }
+
+    public double getBoatLength()
+    {
+      double length = MainView.askForBoatLength();
+      return length;
+    }
+
+    public Boat addBoat(int id, BoatTypes type, double length)
+    {
+      return new Boat(type, length, id);
     }
   }
 }

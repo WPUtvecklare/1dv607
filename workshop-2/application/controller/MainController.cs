@@ -30,7 +30,7 @@ namespace application
       }
       else if (choice == 3)
       {
-        int memberId = vm.askWhichMemberToRemove();
+        int memberId = vm.askForMemberId();
         vm.removeMember(memberId);
       }
       else if (choice == 4)
@@ -40,9 +40,17 @@ namespace application
       }
       else if (choice == 5)
       {
-        // string memberName = mv.enterName();
         Member member = vm.findMember();
         vm.showMember(member);
+      }
+      else if (choice == 6)
+      {
+        int number = vm.selectView();
+        int id = vm.decideView(number);
+        int type = vm.decideBoatType();
+        double length = vm.getBoatLength();
+        Boat boat = vm.addBoat(id, (BoatTypes)type, length);
+        System.Console.WriteLine(boat.showBoatInfo());
       }
 
       run();
