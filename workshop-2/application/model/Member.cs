@@ -19,15 +19,5 @@ namespace application
       _pin = pin;
       _uniqueId = rnd.Next(10000000, 99999999);
     }
-
-    public override string ToString()
-    {
-      return $"Name: {_name.Username} Personal ID: {_pin.Pin} ";
-    }
-
-    public string showMemberProfile()
-    {
-      return $"Name: {_name.Username} Personal ID: {_pin.Pin} Boats:  ";
-    }
   }
 }

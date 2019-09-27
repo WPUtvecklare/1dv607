@@ -1,5 +1,3 @@
-using System;
-
 namespace application
 {
   class PersonalIdentification

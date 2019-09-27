@@ -7,6 +7,8 @@ namespace application
   {
     private List<Member> memberList = new List<Member>();
 
+    public List<Member> MemberList { get => memberList; }
+
     public void addMember(Member member)
     {
       memberList.Add(member);
@@ -37,40 +39,6 @@ namespace application
         throw new Exception("Member not found");
       }
       return member;
-    }
-
-    public string getVerboseList()
-    {
-      string output = "";
-
-      if (memberList.Count == 0)
-      {
-        throw new ApplicationException("No members to show");
-      }
-
-      foreach (var member in memberList)
-      {
-        output += $"Name: {member.Name.Username} Personal number: {member.Pin} Member ID: {member.UniqueId} Boats: ";
-      }
-      return output;
-    }
-
-    public string getCompactList()
-    {
-      string output = "";
-
-      if (memberList.Count == 0)
-      {
-        throw new ApplicationException("No members to show");
-      }
-      else
-      {
-        foreach (var member in memberList)
-        {
-          output += $"Name: {member.Name.Username} Member ID: {member.UniqueId} Boats: ";
-        }
-        return output;
-      }
     }
   }
 }

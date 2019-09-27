@@ -50,7 +50,7 @@ namespace application
         int type = vm.decideBoatType();
         double length = vm.getBoatLength();
         Boat boat = vm.addBoat(id, (BoatTypes)type, length);
-        System.Console.WriteLine(boat.showBoatInfo());
+        mv.render(mv.showBoatInfo(boat));
       }
 
       run();

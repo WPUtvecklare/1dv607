@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace application
 {
@@ -100,6 +101,67 @@ namespace application
       System.Console.Write("Enter boat length: ");
       answer = double.Parse(Console.ReadLine());
       return answer;
+    }
+
+    public string showBoatInfo(Boat boat)
+    {
+      string boatInfo = $"Type: {boat.Type} Length: {boat.Length} ID: {boat.UniqueId} Owner: {boat.OwnerId}";
+      return boatInfo;
+    }
+
+    public string showBoatTypes()
+    {
+      string types = "";
+      foreach (var type in Enum.GetValues(typeof(BoatTypes)))
+      {
+        types += $"\n {(int)type}. {type}";
+
+      }
+      return types;
+    }
+
+    public string getVerboseMemberList(List<Member> memberList)
+    {
+      string output = "";
+
+      if (memberList.Count == 0)
+      {
+        throw new ApplicationException("No members to show");
+      }
+
+      foreach (var member in memberList)
+      {
+        output += $"Name: {member.Name.Username} Personal number: {member.Pin.Pin} Member ID: {member.UniqueId} Boats: ";
+      }
+      return output;
+    }
+
+    public string getCompactMemberList(List<Member> memberList)
+    {
+      string output = "";
+
+      if (memberList.Count == 0)
+      {
+        throw new ApplicationException("No members to show");
+      }
+      else
+      {
+        foreach (var member in memberList)
+        {
+          output += $"Name: {member.Name.Username} Member ID: {member.UniqueId} Boats: ";
+        }
+        return output;
+      }
+    }
+
+    public string showMemberProfile(Member member)
+    {
+      return $"Name: {member.Name.Username} Personal ID: {member.Pin.Pin} Boats:  ";
+    }
+
+    public string showMember(Member member)
+    {
+      return $"Name: {member.Name.Username} Personal ID: {member.Pin.Pin} ";
     }
   }
 }

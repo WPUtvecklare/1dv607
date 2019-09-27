@@ -6,7 +6,6 @@ namespace application
   {
     private MainView MainView = new MainView();
     private Members members = new Members();
-    private BoatType boatType = new BoatType();
     public Name validateUsername()
     {
       string name = MainView.enterName();
@@ -122,11 +121,12 @@ namespace application
       {
         if (choice == 1)
         {
-          MainView.render(members.getCompactList());
+
+          MainView.render(MainView.getCompactMemberList(members.MemberList));
         }
         else
         {
-          MainView.render(members.getVerboseList());
+          MainView.render(MainView.getVerboseMemberList(members.MemberList));
         }
       }
       catch (Exception e)
@@ -141,7 +141,7 @@ namespace application
 
       if (listHasMembers())
       {
-        MainView.render(members.getCompactList());
+        MainView.render(MainView.getCompactMemberList(members.MemberList));
         while (true)
         {
           try
@@ -165,7 +165,7 @@ namespace application
     {
       try
       {
-        members.getCompactList();
+        MainView.getCompactMemberList(members.MemberList);
         return true;
       }
       catch (Exception e)
@@ -183,7 +183,6 @@ namespace application
         {
           members.deleteMember(memberId);
           MainView.printMessage("Successfully removed member with ID " + memberId);
-
         }
       }
       catch (Exception e)
@@ -198,7 +197,7 @@ namespace application
 
       if (listHasMembers())
       {
-        MainView.render(members.getCompactList());
+        MainView.render(MainView.getCompactMemberList(members.MemberList));
         while (true)
         {
           try
@@ -225,7 +224,7 @@ namespace application
         if (listHasMembers())
         {
           Member memberToEdit = members.memberExists(memberId);
-          MainView.render(memberToEdit.ToString());
+          MainView.render(MainView.showMember(memberToEdit));
 
           Name newName = getName();
           PersonalIdentification newPin = getPin();
@@ -262,7 +261,7 @@ namespace application
 
     public void showMember(Member member)
     {
-      MainView.render(member.showMemberProfile());
+      MainView.render(MainView.showMemberProfile(member));
     }
 
     public int selectView()
@@ -288,7 +287,7 @@ namespace application
       {
         if (number == 1)
         {
-          MainView.render(members.getCompactList());
+          MainView.render(MainView.getCompactMemberList(members.MemberList));
           int id = askForMemberId();
           return id;
         }
@@ -308,7 +307,7 @@ namespace application
 
     public int decideBoatType()
     {
-      MainView.render(boatType.showBoatTypes());
+      MainView.render(MainView.showBoatTypes());
       int type = MainView.getBoatType();
       return type;
     }
