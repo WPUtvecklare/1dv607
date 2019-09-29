@@ -5,40 +5,69 @@ namespace application
 {
   class Members
   {
-    private List<Member> memberList = new List<Member>();
+    private List<Member> _memberList = new List<Member>();
 
-    public List<Member> MemberList { get => memberList; }
+    public List<Member> MemberList { get => _memberList; }
 
     public void addMember(Member member)
     {
-      memberList.Add(member);
+      _memberList.Add(member);
     }
 
     public void deleteMember(int memberId)
     {
-      Member member = memberExists(memberId);
-      memberList.RemoveAll(m => m.UniqueId == memberId);
+      _memberList.RemoveAll(m => m.UniqueId == memberId);
     }
 
-    public Member memberExists(int memberId)
+    public bool memberExistsById(int memberId)
     {
-      Member member = memberList.Find(m => m.UniqueId == memberId);
+      Member member = _memberList.Find(m => m.UniqueId == memberId);
 
       if (member == null)
       {
-        throw new Exception("Member not found");
+        return false;
       }
+      else
+      {
+        return true;
+      }
+    }
+
+    public bool memberExistsByName(string name)
+    {
+      Member member = _memberList.Find(m => m.Name.Username == name);
+      if (member == null)
+      {
+        return false;
+      }
+      else
+      {
+        return true;
+      }
+    }
+
+    public Member getMemberByName(string name)
+    {
+      Member member = _memberList.Find(m => m.Name.Username == name);
       return member;
     }
 
-    public Member findMemberByName(string name)
+    public Member getMemberById(int id)
     {
-      Member member = memberList.Find(m => m.Name.Username == name);
-      if (member == null)
-      {
-        throw new Exception("Member not found");
-      }
+      Member member = _memberList.Find(m => m.UniqueId == id);
       return member;
+    }
+
+    public bool listHasMembers()
+    {
+      if (_memberList.Count == 0)
+      {
+        return false;
+      }
+      else
+      {
+        return true;
+      }
     }
   }
 }

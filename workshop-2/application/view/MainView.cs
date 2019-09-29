@@ -52,7 +52,6 @@ namespace application
     public int renderMemberListType()
     {
       int number;
-
       Console.WriteLine("1. Compact List");
       Console.WriteLine("2. Verbose List");
 
@@ -98,7 +97,7 @@ namespace application
     public double askForBoatLength()
     {
       double answer = 0;
-      System.Console.Write("Enter boat length: ");
+      System.Console.Write("Enter boat length in meter (max 20): ");
       answer = double.Parse(Console.ReadLine());
       return answer;
     }
@@ -131,7 +130,7 @@ namespace application
 
       foreach (var member in memberList)
       {
-        output += $"Name: {member.Name.Username} Personal number: {member.Pin.Pin} Member ID: {member.UniqueId} Boats: ";
+        output += $"Name: {member.Name.Username} Personal number: {member.Pin.Pin} Member ID: {member.UniqueId} Boats: {getMemberBoats(member)} ";
       }
       return output;
     }
@@ -148,15 +147,26 @@ namespace application
       {
         foreach (var member in memberList)
         {
-          output += $"Name: {member.Name.Username} Member ID: {member.UniqueId} Boats: ";
+          output += $"Name: {member.Name.Username} Member ID: {member.UniqueId} Boats: {member.Boats.Count}";
         }
         return output;
       }
     }
 
+    public string getMemberBoats(Member member)
+    {
+      string output = "";
+
+      foreach (var boat in member.Boats)
+      {
+        output += $"\nType: {boat.Type} \nLength: {boat.Length} \nID: {boat.UniqueId}";
+      }
+      return output;
+    }
+
     public string showMemberProfile(Member member)
     {
-      return $"Name: {member.Name.Username} Personal ID: {member.Pin.Pin} Boats:  ";
+      return $"Name: {member.Name.Username} Personal ID: {member.Pin.Pin} Boats: {member.Boats.Count}";
     }
 
     public string showMember(Member member)
