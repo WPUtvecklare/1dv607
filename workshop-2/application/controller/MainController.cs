@@ -4,14 +4,17 @@ namespace application
 {
   class MainController
   {
-    MainView _mv = new MainView();
+    private MainView _mv;
     private Members _members;
-    ViewModel _vm;
+    private ViewModel _vm;
+    private Storage _storage;
 
     public MainController()
     {
-      _members = new Members();
+      _storage = new Storage();
+      _members = new Members(_storage);
       _vm = new ViewModel(_members);
+      _mv = new MainView();
 
     }
     public void run()
@@ -78,6 +81,7 @@ namespace application
         }
         else if (choice == 7)
         {
+          _storage.saveToJson(_members.MemberList);
           Environment.Exit(0);
         }
       }
