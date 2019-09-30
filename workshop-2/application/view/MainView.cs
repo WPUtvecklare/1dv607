@@ -15,7 +15,8 @@ namespace application
       Console.WriteLine("4. Change a member's details");
       Console.WriteLine("5. Search for member");
       Console.WriteLine("6. Add boat");
-      Console.WriteLine("7. Exit");
+      Console.WriteLine("7. Remove a boat");
+      Console.WriteLine("8. Exit");
 
       number = int.Parse(Console.ReadLine());
       return number;
@@ -102,6 +103,14 @@ namespace application
       return answer;
     }
 
+    public int getBoatId()
+    {
+      int answer = 0;
+      Console.Write("Enter ID of boat to remove: ");
+      answer = int.Parse(Console.ReadLine());
+      return answer;
+    }
+
     public string showBoatInfo(Boat boat)
     {
       string boatInfo = $"Type: {boat.Type} Length: {boat.Length} ID: {boat.UniqueId} Owner: {boat.OwnerId}";
@@ -130,7 +139,7 @@ namespace application
 
       foreach (var member in memberList)
       {
-        output += $"Name: {member.Name.Username} Personal number: {member.Pin.Pin} Member ID: {member.UniqueId} Boats: {getMemberBoats(member)} ";
+        output += $"\nName: {member.Name.Username} Personal number: {member.Pin.Pin} Member ID: {member.UniqueId} Boats: {getMemberBoats(member)} ";
       }
       return output;
     }
@@ -147,7 +156,7 @@ namespace application
       {
         foreach (var member in memberList)
         {
-          output += $"Name: {member.Name.Username} Member ID: {member.UniqueId} Boats: {member.Boats.Count}";
+          output += $"\nName: {member.Name.Username} Member ID: {member.UniqueId} Boats: {member.Boats.Count}";
         }
         return output;
       }
@@ -159,7 +168,7 @@ namespace application
 
       foreach (var boat in member.Boats)
       {
-        output += $"\nType: {boat.Type} \nLength: {boat.Length} \nID: {boat.UniqueId}";
+        output += $"\nType: {boat.Type} \nLength: {boat.Length} \nID: {boat.UniqueId}\n";
       }
       return output;
     }

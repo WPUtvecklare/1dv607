@@ -12,7 +12,13 @@ namespace application
 
     private List<Boat> _boats = new List<Boat>();
 
-    public Name Name { get => _name; set => _name = value; }
+    public Name Name
+    {
+      get => _name; set
+      {
+        _name = value;
+      }
+    }
     public PersonalIdentification Pin { get => _pin; set => _pin = value; }
     public int UniqueId { get => _uniqueId; }
 
@@ -28,6 +34,25 @@ namespace application
     public void addBoat(Boat boat)
     {
       _boats.Add(boat);
+    }
+
+    public void removeBoat(int id)
+    {
+      _boats.RemoveAll(b => b.UniqueId == id);
+    }
+
+    public bool boatExists(int id)
+    {
+      Boat boat = _boats.Find(m => m.UniqueId == id);
+
+      if (boat == null)
+      {
+        return false;
+      }
+      else
+      {
+        return true;
+      }
     }
   }
 }

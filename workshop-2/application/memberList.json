@@ -1,0 +1,29 @@
+[
+  {
+    "Name": {
+      "Username": "hello"
+    },
+    "Pin": {
+      "Pin": "1234567890"
+    },
+    "UniqueId": 89532413,
+    "Boats": [
+      {
+        "Type": 1,
+        "Length": 2.0,
+        "OwnerId": 20145847,
+        "UniqueId": 77619761
+      }
+    ]
+  },
+  {
+    "Name": {
+      "Username": "fgyuhstj"
+    },
+    "Pin": {
+      "Pin": "0987654321"
+    },
+    "UniqueId": 93997779,
+    "Boats": []
+  }
+]

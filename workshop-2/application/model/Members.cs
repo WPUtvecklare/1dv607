@@ -9,6 +9,13 @@ namespace application
 
     public List<Member> MemberList { get => _memberList; }
 
+    public Members(Storage storage)
+    {
+      if (storage.loadUsers() != null)
+      {
+        _memberList = storage.loadUsers();
+      }
+    }
     public void addMember(Member member)
     {
       _memberList.Add(member);

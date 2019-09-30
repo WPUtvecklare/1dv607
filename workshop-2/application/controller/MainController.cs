@@ -4,14 +4,17 @@ namespace application
 {
   class MainController
   {
-    MainView _mv = new MainView();
+    private MainView _mv;
     private Members _members;
-    ViewModel _vm;
+    private ViewModel _vm;
+    private Storage _storage;
 
     public MainController()
     {
-      _members = new Members();
+      _storage = new Storage();
+      _members = new Members(_storage);
       _vm = new ViewModel(_members);
+      _mv = new MainView();
 
     }
     public void run()
@@ -78,6 +81,23 @@ namespace application
         }
         else if (choice == 7)
         {
+          // Remove a boat
+          if (_members.listHasMembers())
+          {
+            _mv.render(_mv.getCompactMemberList(_members.MemberList));
+
+            int id = validateMemberId();
+            deleteBoat(id);
+            _mv.printMessage("Successfully removed boat");
+          }
+          else
+          {
+            _mv.printMessage("No users found");
+          }
+        }
+        else if (choice == 8)
+        {
+          _storage.saveToJson(_members.MemberList);
           Environment.Exit(0);
         }
       }
@@ -221,28 +241,7 @@ namespace application
       try
       {
         int number = listOrName();
-        int memberId = 0;
-
-        if (number == 1)
-        {
-          _mv.render(_mv.getCompactMemberList(_members.MemberList));
-          memberId = validateMemberId();
-        }
-        else
-        {
-          Name name = getName();
-          if (_members.memberExistsByName(name.Username))
-          {
-            Member member = _members.getMemberByName(name.Username);
-            memberId = member.UniqueId;
-          }
-          else
-          {
-            _mv.printMessage("Member not found");
-            shouldAddBoat();
-          }
-        }
-
+        int memberId = getMemberId(number);
         _mv.render(_mv.showBoatTypes());
         int type = validateBoatType();
         double length = validateBoatLength();
@@ -255,6 +254,44 @@ namespace application
       catch (Exception e)
       {
         _mv.printMessage(e.Message);
+      }
+    }
+
+    public int getMemberId(int number)
+    {
+
+      if (number == 1)
+      {
+        _mv.render(_mv.getCompactMemberList(_members.MemberList));
+        return validateMemberId();
+      }
+      else
+      {
+        return getMemberName();
+      }
+    }
+
+    public int getMemberName()
+    {
+      while (true)
+      {
+        try
+        {
+          Name name = getName();
+          if (_members.memberExistsByName(name.Username))
+          {
+            Member member = _members.getMemberByName(name.Username);
+            return member.UniqueId;
+          }
+          else
+          {
+            throw new Exception("Member not found");
+          }
+        }
+        catch (Exception e)
+        {
+          _mv.printMessage(e.Message);
+        }
       }
     }
 
@@ -346,6 +383,38 @@ namespace application
         }
       }
       return newPin;
+    }
+
+    public void deleteBoat(int memberId)
+    {
+      Member member = _members.getMemberById(memberId);
+      _mv.render(_mv.getMemberBoats(member));
+      int id = validateBoatId(member);
+      member.removeBoat(id);
+    }
+
+    public int validateBoatId(Member member)
+    {
+      while (true)
+      {
+        try
+        {
+          int id = _mv.getBoatId();
+
+          if (member.boatExists(id))
+          {
+            return id;
+          }
+          else
+          {
+            throw new Exception("Boat not found");
+          }
+        }
+        catch (Exception e)
+        {
+          _mv.printMessage(e.Message);
+        }
+      }
     }
   }
 }
