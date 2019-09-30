@@ -97,6 +97,22 @@ namespace application
         }
         else if (choice == 8)
         {
+          if (_members.listHasMembers())
+          {
+            _mv.render(_mv.getCompactMemberList(_members.MemberList));
+
+            int id = validateMemberId();
+            changeBoatDetails(id);
+            _mv.printMessage("Boat successfully changed");
+          }
+          else
+          {
+            _mv.printMessage("No users found");
+          }
+
+        }
+        else if (choice == 9)
+        {
           _storage.saveToJson(_members.MemberList);
           Environment.Exit(0);
         }
@@ -234,6 +250,19 @@ namespace application
         _mv.printMessage("Member not found.");
         searchForMember(name);
       }
+    }
+
+    public void changeBoatDetails(int id)
+    {
+      Member m = _members.getMemberById(id);
+      _mv.render(_mv.showMembersBoats(m.Boats));
+      int boatId = validateBoatId(m);
+      Boat boat = m.getBoatById(boatId);
+      _mv.render(_mv.showBoatTypes());
+      int type = validateBoatType();
+      double length = validateBoatLength();
+      boat.Length = length;
+      boat.Type = (BoatTypes)type;
     }
 
     public void shouldAddBoat()

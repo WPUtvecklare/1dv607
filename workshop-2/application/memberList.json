@@ -6,13 +6,19 @@
     "Pin": {
       "Pin": "1234567890"
     },
-    "UniqueId": 89532413,
+    "UniqueId": 65760312,
     "Boats": [
       {
-        "Type": 1,
-        "Length": 2.0,
+        "Type": 2,
+        "Length": 4.5,
         "OwnerId": 20145847,
         "UniqueId": 77619761
+      },
+      {
+        "Type": 3,
+        "Length": 3.4,
+        "OwnerId": 65760312,
+        "UniqueId": 77437714
       }
     ]
   },
@@ -23,7 +29,14 @@
     "Pin": {
       "Pin": "0987654321"
     },
-    "UniqueId": 93997779,
-    "Boats": []
+    "UniqueId": 20255439,
+    "Boats": [
+      {
+        "Type": 2,
+        "Length": 4.0,
+        "OwnerId": 57628948,
+        "UniqueId": 76060593
+      }
+    ]
   }
 ]

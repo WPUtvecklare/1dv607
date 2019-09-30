@@ -9,14 +9,16 @@ namespace application
     {
       int number;
 
-      Console.WriteLine("1. Add new member");
+
+      Console.WriteLine("\n1. Add new member");
       Console.WriteLine("2. View all members");
       Console.WriteLine("3. Remove a member");
       Console.WriteLine("4. Change a member's details");
       Console.WriteLine("5. Search for member");
       Console.WriteLine("6. Add boat");
       Console.WriteLine("7. Remove a boat");
-      Console.WriteLine("8. Exit");
+      Console.WriteLine("8. Change Boat details");
+      Console.WriteLine("9. Exit\n");
 
       number = int.Parse(Console.ReadLine());
       return number;
@@ -106,7 +108,7 @@ namespace application
     public int getBoatId()
     {
       int answer = 0;
-      Console.Write("Enter ID of boat to remove: ");
+      Console.Write("Enter ID of boat: ");
       answer = int.Parse(Console.ReadLine());
       return answer;
     }
@@ -160,6 +162,17 @@ namespace application
         }
         return output;
       }
+    }
+
+    public string showMembersBoats(List<Boat> boats)
+    {
+      string output = "";
+
+      foreach (var boat in boats)
+      {
+        output += $"\nType: {boat.Type} \nLength: {boat.Length} \nID: {boat.UniqueId}\n";
+      }
+      return output;
     }
 
     public string getMemberBoats(Member member)

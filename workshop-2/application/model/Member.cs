@@ -31,15 +31,12 @@ namespace application
       _uniqueId = rnd.Next(10000000, 99999999);
     }
 
-    public void addBoat(Boat boat)
-    {
-      _boats.Add(boat);
-    }
+    public void addBoat(Boat boat) => _boats.Add(boat);
 
-    public void removeBoat(int id)
-    {
-      _boats.RemoveAll(b => b.UniqueId == id);
-    }
+    public void removeBoat(int id) => _boats.RemoveAll(b => b.UniqueId == id);
+
+
+    public Boat getBoatById(int id) => _boats.Find(m => m.UniqueId == id);
 
     public bool boatExists(int id)
     {
