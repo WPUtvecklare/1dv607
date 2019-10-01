@@ -97,9 +97,11 @@ namespace application
         }
         else if (choice == 8)
         {
+          // Change boat details
           if (_members.listHasMembers())
           {
             _mv.render(_mv.getCompactMemberList(_members.MemberList));
+            _mv.printMessage("Choose the member which boat(s) you want to edit");
 
             int id = validateMemberId();
             changeBoatDetails(id);
@@ -113,6 +115,7 @@ namespace application
         }
         else if (choice == 9)
         {
+          // Save and Exit
           _storage.saveToJson(_members.MemberList);
           Environment.Exit(0);
         }
@@ -256,9 +259,11 @@ namespace application
     {
       Member m = _members.getMemberById(id);
       _mv.render(_mv.showMembersBoats(m.Boats));
+
       int boatId = validateBoatId(m);
       Boat boat = m.getBoatById(boatId);
       _mv.render(_mv.showBoatTypes());
+
       int type = validateBoatType();
       double length = validateBoatLength();
       boat.Length = length;

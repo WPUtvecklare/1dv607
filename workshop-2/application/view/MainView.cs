@@ -17,8 +17,8 @@ namespace application
       Console.WriteLine("5. Search for member");
       Console.WriteLine("6. Add boat");
       Console.WriteLine("7. Remove a boat");
-      Console.WriteLine("8. Change Boat details");
-      Console.WriteLine("9. Exit\n");
+      Console.WriteLine("8. Change boat details");
+      Console.WriteLine("9. Save & Exit\n");
 
       number = int.Parse(Console.ReadLine());
       return number;
