@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace application
 {
@@ -7,7 +8,7 @@ namespace application
   {
     private List<Member> _memberList = new List<Member>();
 
-    public List<Member> MemberList { get => _memberList; }
+    public ReadOnlyCollection<Member> MemberList { get => new ReadOnlyCollection<Member>(_memberList); }
 
     public Members(Storage storage)
     {

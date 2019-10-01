@@ -2,17 +2,13 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace application
 {
   class Storage
   {
-
-    public Storage()
-    {
-    }
-
-    public void saveToJson(List<Member> memberList)
+    public void saveToJson(ReadOnlyCollection<Member> memberList)
     {
       File.WriteAllText("memberList.json", JsonConvert.SerializeObject(memberList, Formatting.Indented));
     }

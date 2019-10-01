@@ -13,7 +13,7 @@ namespace application
     {
       _storage = new Storage();
       _members = new Members(_storage);
-      _vm = new ViewModel(_members);
+      _vm = new ViewModel();
       _mv = new MainView();
 
     }
@@ -35,7 +35,7 @@ namespace application
         if (choice == 1)
         {
           // Add member
-          shouldAddMember();
+          handleAddingMember();
           _mv.printMessage("Successfully added a new member");
 
         }
@@ -48,23 +48,12 @@ namespace application
         else if (choice == 3)
         {
           // Remove a member
-          if (_members.listHasMembers())
-          {
-            _mv.render(_mv.getCompactMemberList(_members.MemberList));
-
-            int id = validateMemberId();
-            _members.deleteMember(id);
-            _mv.printMessage("Successfully removed member");
-          }
-          else
-          {
-            _mv.printMessage("No users found");
-          }
+          handleRemovingMembers();
         }
         else if (choice == 4)
         {
           // Edit a member
-          shouldEditMember();
+          handleEditMember();
           _mv.printMessage("The member has been edited");
         }
         else if (choice == 5)
@@ -82,35 +71,12 @@ namespace application
         else if (choice == 7)
         {
           // Remove a boat
-          if (_members.listHasMembers())
-          {
-            _mv.render(_mv.getCompactMemberList(_members.MemberList));
-
-            int id = validateMemberId();
-            deleteBoat(id);
-            _mv.printMessage("Successfully removed boat");
-          }
-          else
-          {
-            _mv.printMessage("No users found");
-          }
+          handleRemovingBoats();
         }
         else if (choice == 8)
         {
           // Change boat details
-          if (_members.listHasMembers())
-          {
-            _mv.render(_mv.getCompactMemberList(_members.MemberList));
-            _mv.printMessage("Choose the member which boat(s) you want to edit");
-
-            int id = validateMemberId();
-            changeBoatDetails(id);
-            _mv.printMessage("Boat successfully changed");
-          }
-          else
-          {
-            _mv.printMessage("No users found");
-          }
+          handleEditBoat();
 
         }
         else if (choice == 9)
@@ -128,7 +94,7 @@ namespace application
       run();
     }
 
-    public void shouldAddMember()
+    public void handleAddingMember()
     {
       Name newName = validateName();
       PersonalIdentification newPin = validatePin();
@@ -142,7 +108,7 @@ namespace application
         try
         {
           int selection = _mv.renderMemberListType();
-          return _vm.validateMenuChoice(selection, 1, 2);
+          return _vm.validateMenuChoice(selection, 1, 2); // Validate that user submits 1 or 2
         }
         catch (Exception e)
         {
@@ -171,8 +137,15 @@ namespace application
         try
         {
           int answer = _mv.getMemberById();
-          int id = _vm.findMemberById(answer);
-          return id;
+          bool memberExists = _members.memberExistsById(answer);
+          if (memberExists)
+          {
+            return answer;
+          }
+          else
+          {
+            throw new IndexOutOfRangeException("Member not found");
+          }
         }
         catch (Exception e)
         {
@@ -181,16 +154,65 @@ namespace application
       }
     }
 
-    public void shouldEditMember()
+    public void handleEditMember()
     {
       if (_members.listHasMembers())
       {
         _mv.render(_mv.getCompactMemberList(_members.MemberList));
 
-        int id = getID();
+        int id = validateMemberId();
         Member member = _members.getMemberById(id);
         member.Name = getName();
         member.Pin = getPin();
+      }
+    }
+
+    public void handleRemovingMembers()
+    {
+      if (_members.listHasMembers())
+      {
+        _mv.render(_mv.getCompactMemberList(_members.MemberList));
+
+        int id = validateMemberId();
+        _members.deleteMember(id);
+        _mv.printMessage("Successfully removed member");
+      }
+      else
+      {
+        _mv.printMessage("No users found");
+      }
+    }
+
+    public void handleRemovingBoats()
+    {
+      if (_members.listHasMembers())
+      {
+        _mv.render(_mv.getCompactMemberList(_members.MemberList));
+
+        int id = validateMemberId();
+        deleteBoat(id);
+        _mv.printMessage("Successfully removed boat");
+      }
+      else
+      {
+        _mv.printMessage("No users found");
+      }
+    }
+
+    public void handleEditBoat()
+    {
+      if (_members.listHasMembers())
+      {
+        _mv.render(_mv.getCompactMemberList(_members.MemberList));
+        _mv.printMessage("Choose the member which boat(s) you want to edit");
+
+        int id = validateMemberId();
+        changeBoatDetails(id);
+        _mv.printMessage("Boat successfully changed");
+      }
+      else
+      {
+        _mv.printMessage("No users found");
       }
     }
     public PersonalIdentification getPin()
@@ -216,22 +238,6 @@ namespace application
         {
           string name = _mv.enterName();
           return _vm.validateUsername(new Name(name));
-
-        }
-        catch (Exception e)
-        {
-          _mv.printMessage(e.Message);
-        }
-      }
-    }
-    public int getID()
-    {
-      while (true)
-      {
-        try
-        {
-          int c = _mv.getMemberToEdit();
-          return _vm.findMemberById(c);
 
         }
         catch (Exception e)
@@ -319,7 +325,7 @@ namespace application
           }
           else
           {
-            throw new Exception("Member not found");
+            throw new IndexOutOfRangeException("Member not found");
           }
         }
         catch (Exception e)

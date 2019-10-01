@@ -4,13 +4,6 @@ namespace application
 {
   class ViewModel
   {
-    private Members _members;
-
-    public ViewModel(Members members)
-    {
-      _members = members;
-    }
-
     public Name validateUsername(Name newName)
     {
       if (!newName.isValid())
@@ -27,18 +20,6 @@ namespace application
         throw new ApplicationException("The personal identification number should only be 10 numbers");
       }
       return newPin;
-    }
-
-    public int findMemberById(int memberId)
-    {
-      if (_members.memberExistsById(memberId))
-      {
-        return memberId;
-      }
-      else
-      {
-        throw new ApplicationException("Member not found");
-      }
     }
 
     public int validateMenuChoice(int choice, int min, int max)

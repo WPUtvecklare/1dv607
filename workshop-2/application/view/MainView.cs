@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace application
 {
@@ -71,15 +72,6 @@ namespace application
       return id;
     }
 
-    public int getMemberToEdit()
-    {
-      int id;
-
-      Console.Write("Enter ID of member to edit: ");
-      id = int.Parse(Console.ReadLine());
-      return id;
-    }
-
     public int getWhichMemberToAssignABoat()
     {
       int answer = 0;
@@ -130,7 +122,7 @@ namespace application
       return types;
     }
 
-    public string getVerboseMemberList(List<Member> memberList)
+    public string getVerboseMemberList(ReadOnlyCollection<Member> memberList)
     {
       string output = "";
 
@@ -146,7 +138,7 @@ namespace application
       return output;
     }
 
-    public string getCompactMemberList(List<Member> memberList)
+    public string getCompactMemberList(ReadOnlyCollection<Member> memberList)
     {
       string output = "";
 
