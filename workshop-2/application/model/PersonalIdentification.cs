@@ -1,3 +1,5 @@
+using System;
+
 namespace application
 {
   class PersonalIdentification
@@ -8,18 +10,6 @@ namespace application
     public PersonalIdentification(string pin)
     {
       _pin = pin;
-    }
-
-    public bool isValid()
-    {
-      if (_pin.Length == 10)
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
     }
   }
 }

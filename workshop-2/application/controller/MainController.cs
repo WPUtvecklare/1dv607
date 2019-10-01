@@ -6,14 +6,12 @@ namespace application
   {
     private MainView _mv;
     private Members _members;
-    private ViewModel _vm;
     private Storage _storage;
 
     public MainController()
     {
       _storage = new Storage();
       _members = new Members(_storage);
-      _vm = new ViewModel();
       _mv = new MainView();
 
     }
@@ -96,8 +94,8 @@ namespace application
 
     public void handleAddingMember()
     {
-      Name newName = validateName();
-      PersonalIdentification newPin = validatePin();
+      Name newName = getName();
+      PersonalIdentification newPin = getPin();
       _members.addMember(new Member(newName, newPin));
     }
 
@@ -108,7 +106,7 @@ namespace application
         try
         {
           int selection = _mv.renderMemberListType();
-          return _vm.validateMenuChoice(selection, 1, 2); // Validate that user submits 1 or 2
+          return validateMenuChoice(selection, 1, 2); // Validate that user submits 1 or 2
         }
         catch (Exception e)
         {
@@ -215,29 +213,24 @@ namespace application
         _mv.printMessage("No users found");
       }
     }
-    public PersonalIdentification getPin()
-    {
-      while (true)
-      {
-        try
-        {
-          string pin = _mv.enterPin();
-          return _vm.validatePin(new PersonalIdentification(pin));
-        }
-        catch (Exception e)
-        {
-          _mv.printMessage(e.Message);
-        }
-      }
-    }
+
     public Name getName()
     {
       while (true)
       {
         try
         {
+
           string name = _mv.enterName();
-          return _vm.validateUsername(new Name(name));
+          if (name.Length >= 3 && name.Length <= 15)
+          {
+            Name newName = new Name(name);
+            return newName;
+          }
+          else
+          {
+            throw new ApplicationException("Enter a name between 3 and 15 letters");
+          }
 
         }
         catch (Exception e)
@@ -257,7 +250,6 @@ namespace application
       else
       {
         _mv.printMessage("Member not found.");
-        searchForMember(name);
       }
     }
 
@@ -361,7 +353,7 @@ namespace application
         try
         {
           double length = _mv.askForBoatLength();
-          return _vm.isBoatLengthValid(length);
+          return isBoatLengthValid(length);
         }
         catch (Exception e)
         {
@@ -379,7 +371,7 @@ namespace application
         try
         {
           int ch = _mv.getWhichMemberToAssignABoat();
-          return _vm.validateMenuChoice(ch, 1, 2);
+          return validateMenuChoice(ch, 1, 2);
         }
         catch (Exception e)
         {
@@ -387,43 +379,31 @@ namespace application
         }
       }
     }
-    public Name validateName()
+
+    public PersonalIdentification getPin()
     {
-      Name newName = new Name("");
-
-      while (!newName.isValid())
-      {
-        try
-        {
-          string name = _mv.enterName();
-          newName = _vm.validateUsername(new Name(name));
-        }
-        catch (Exception e)
-        {
-          _mv.printMessage(e.Message);
-        }
-      }
-      return newName;
-    }
-
-    public PersonalIdentification validatePin()
-    {
-      PersonalIdentification newPin = new PersonalIdentification("");
-
-      while (!newPin.isValid())
+      while (true)
       {
         try
         {
           string pin = _mv.enterPin();
-          newPin = _vm.validatePin(new PersonalIdentification(pin));
+          if (pin.Length != 10)
+          {
+            throw new Exception("The personal identification number should only be 10 numbers");
+          }
+          else
+          {
+            return new PersonalIdentification(pin);
+          }
         }
         catch (Exception e)
         {
           _mv.printMessage(e.Message);
         }
       }
-      return newPin;
     }
+
+
 
     public void deleteBoat(int memberId)
     {
@@ -454,6 +434,29 @@ namespace application
         {
           _mv.printMessage(e.Message);
         }
+      }
+    }
+
+    public int validateMenuChoice(int choice, int min, int max)
+    {
+      if (!(choice < min || choice > max))
+      {
+        return choice;
+      }
+      else
+      {
+        throw new ApplicationException("Not a valid value");
+      }
+    }
+    public double isBoatLengthValid(double length)
+    {
+      if (!(length < 1 || length > 20))
+      {
+        return length;
+      }
+      else
+      {
+        throw new ApplicationException("Not a valid length. Minimum length: 1 meter. Max length: 20 meter.");
       }
     }
   }

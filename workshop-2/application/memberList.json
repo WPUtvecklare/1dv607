@@ -6,19 +6,19 @@
     "Pin": {
       "Pin": "1234567890"
     },
-    "UniqueId": 60746431,
+    "UniqueId": 79872114,
     "Boats": [
       {
-        "Type": 2,
-        "Length": 4.5,
-        "OwnerId": 20145847,
-        "UniqueId": 77619761
+        "Type": 1,
+        "Length": 20.0,
+        "OwnerId": 58963067,
+        "UniqueId": 37561064
       },
       {
-        "Type": 3,
-        "Length": 3.4,
-        "OwnerId": 65760312,
-        "UniqueId": 77437714
+        "Type": 2,
+        "Length": 10.0,
+        "OwnerId": 79872114,
+        "UniqueId": 25168867
       }
     ]
   },
@@ -29,15 +29,8 @@
     "Pin": {
       "Pin": "0987654321"
     },
-    "UniqueId": 15109072,
-    "Boats": [
-      {
-        "Type": 2,
-        "Length": 4.0,
-        "OwnerId": 57628948,
-        "UniqueId": 76060593
-      }
-    ]
+    "UniqueId": 39917034,
+    "Boats": []
   },
   {
     "Name": {
@@ -46,7 +39,7 @@
     "Pin": {
       "Pin": "1919191919"
     },
-    "UniqueId": 12001531,
+    "UniqueId": 28730412,
     "Boats": []
   }
 ]
