@@ -10,12 +10,12 @@ namespace application
   {
     public void saveToJson(ReadOnlyCollection<Member> memberList)
     {
-      File.WriteAllText("memberList.json", JsonConvert.SerializeObject(memberList, Formatting.Indented));
+      File.WriteAllText("AppData/memberList.json", JsonConvert.SerializeObject(memberList, Formatting.Indented));
     }
 
     public List<Member> loadUsers()
     {
-      string json = File.ReadAllText("memberList.json");
+      string json = File.ReadAllText("AppData/memberList.json");
       List<Member> members = JsonConvert.DeserializeObject<List<Member>>(json);
       return members;
     }
