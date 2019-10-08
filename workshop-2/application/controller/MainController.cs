@@ -17,7 +17,6 @@ namespace application
             _mv = new MainView();
             _bv = new BoatView();
             _memberView = new MemberView();
-
         }
         public void run()
         {
@@ -81,7 +80,6 @@ namespace application
             {
                 _mv.printMessage(e.Message);
             }
-
             run();
         }
 
@@ -151,7 +149,6 @@ namespace application
                 {
                     _bv.printNoBoatsFound();
                 }
-
             }
             else
             {
@@ -174,7 +171,6 @@ namespace application
                 {
                     changeBoatDetails(id);
                     _bv.printChangedBoat();
-
                 }
                 else
                 {

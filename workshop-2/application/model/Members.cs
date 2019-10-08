@@ -4,78 +4,53 @@ using System.Collections.ObjectModel;
 
 namespace application
 {
-  class Members
-  {
-    private List<Member> _memberList = new List<Member>();
-
-    public ReadOnlyCollection<Member> MemberList { get => new ReadOnlyCollection<Member>(_memberList); }
-
-    public Members(Storage storage)
+    class Members
     {
-      if (storage.loadUsers() != null)
-      {
-        _memberList = storage.loadUsers();
-      }
-    }
-    public void addMember(Member member)
-    {
-      _memberList.Add(member);
-    }
+        private List<Member> _memberList = new List<Member>();
 
-    public void deleteMember(int memberId)
-    {
-      _memberList.RemoveAll(m => m.UniqueId == memberId);
-    }
+        public ReadOnlyCollection<Member> MemberList { get => new ReadOnlyCollection<Member>(_memberList); }
 
-    public bool memberExistsById(int memberId)
-    {
-      Member member = _memberList.Find(m => m.UniqueId == memberId);
+        public Members(Storage storage)
+        {
+            if (storage.loadUsers() != null)
+            {
+                _memberList = storage.loadUsers();
+            }
+        }
+        public void addMember(Member member)
+        {
+            _memberList.Add(member);
+        }
 
-      if (member == null)
-      {
-        return false;
-      }
-      else
-      {
-        return true;
-      }
-    }
+        public void deleteMember(int memberId)
+        {
+            _memberList.RemoveAll(m => m.UniqueId == memberId);
+        }
 
-    public bool memberExistsByName(string name)
-    {
-      Member member = _memberList.Find(m => m.Name.Username == name);
-      if (member == null)
-      {
-        return false;
-      }
-      else
-      {
-        return true;
-      }
-    }
+        public bool memberExistsById(int memberId)
+        {
+            Member member = _memberList.Find(m => m.UniqueId == memberId);
+            return member == null ? false : true;
+        }
 
-    public Member getMemberByName(string name)
-    {
-      Member member = _memberList.Find(m => m.Name.Username == name);
-      return member;
-    }
+        public bool memberExistsByName(string name)
+        {
+            Member member = _memberList.Find(m => m.Name.Username == name);
+            return member == null ? false : true;
+        }
 
-    public Member getMemberById(int id)
-    {
-      Member member = _memberList.Find(m => m.UniqueId == id);
-      return member;
-    }
+        public Member getMemberByName(string name)
+        {
+            Member member = _memberList.Find(m => m.Name.Username == name);
+            return member;
+        }
 
-    public bool listHasMembers()
-    {
-      if (_memberList.Count == 0)
-      {
-        return false;
-      }
-      else
-      {
-        return true;
-      }
+        public Member getMemberById(int id)
+        {
+            Member member = _memberList.Find(m => m.UniqueId == id);
+            return member;
+        }
+
+        public bool listHasMembers() => _memberList.Count == 0 ? false : true;
     }
-  }
 }

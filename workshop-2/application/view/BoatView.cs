@@ -31,7 +31,6 @@ namespace application
                 {
                     return (AssignBoatMenu)answer;
                 }
-
             }
         }
 
@@ -51,7 +50,6 @@ namespace application
                 {
                     printMessage("Not a valid boat type");
                 }
-
             }
         }
 
@@ -71,7 +69,6 @@ namespace application
                     printMessage($"Not a valid length. Minimum length: {minimumBoatLength} meter. Max length: {maximumBoatLength} meter.");
                 }
             }
-
         }
 
         public int getBoatId(Member member)
@@ -89,7 +86,6 @@ namespace application
                 {
                     printMessage("Boat not found");
                 }
-
             }
         }
 
@@ -105,7 +101,6 @@ namespace application
             foreach (var type in Enum.GetValues(typeof(BoatTypes)))
             {
                 types += $"\n {(int)type}. {type}";
-
             }
             return types;
         }

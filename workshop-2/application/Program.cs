@@ -2,12 +2,12 @@
 
 namespace application
 {
-  class Program
-  {
-    static void Main(string[] args)
+    class Program
     {
-      MainController mc = new MainController();
-      mc.run();
+        static void Main()
+        {
+            MainController mc = new MainController();
+            mc.run();
+        }
     }
-  }
 }
