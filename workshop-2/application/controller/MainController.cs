@@ -2,462 +2,273 @@ using System;
 
 namespace application
 {
-  class MainController
-  {
-    private MainView _mv;
-    private Members _members;
-    private Storage _storage;
-
-    public MainController()
+    class MainController
     {
-      _storage = new Storage();
-      _members = new Members(_storage);
-      _mv = new MainView();
+        private MainView _mv;
+        private BoatView _bv;
+        private MemberView _memberView;
+        private Members _members;
+        private Storage _storage;
 
+        public MainController()
+        {
+            _storage = new Storage();
+            _members = new Members(_storage);
+            _mv = new MainView();
+            _bv = new BoatView();
+            _memberView = new MemberView();
+
+        }
+        public void run()
+        {
+            MainMenu choice = 0;
+            choice = _mv.showMenu();
+
+            try
+            {
+                if (choice == MainMenu.AddMember)
+                {
+                    // Add member
+                    handleAddingMember();
+                    _memberView.printAddedNewMember();
+                }
+                else if (choice == MainMenu.ViewMembers)
+                {
+                    // View all members
+                    MemberListTypes list = _memberView.renderMemberListType();
+                    _mv.render(getMemberList(list));
+                }
+                else if (choice == MainMenu.RemoveMember)
+                {
+                    // Remove a member
+                    handleRemovingMembers();
+                }
+                else if (choice == MainMenu.ChangeMember)
+                {
+                    // Edit a member
+                    handleEditMember();
+                    _memberView.printMemberHasBeenEdited();
+                }
+                else if (choice == MainMenu.SearchMember)
+                {
+                    // Search a member
+                    searchForMember();
+                }
+                else if (choice == MainMenu.AddBoat)
+                {
+                    // Add a boat
+                    shouldAddBoat();
+                    _bv.printAddedBoat();
+                }
+                else if (choice == MainMenu.RemoveBoat)
+                {
+                    // Remove a boat
+                    handleRemovingBoats();
+                }
+                else if (choice == MainMenu.ChangeBoat)
+                {
+                    // Change boat details
+                    handleEditBoat();
+                }
+                else if (choice == MainMenu.SaveExit)
+                {
+                    // Save and Exit
+                    _storage.saveToJson(_members.MemberList);
+                    Environment.Exit(0);
+                }
+            }
+            catch (Exception e)
+            {
+                _mv.printMessage(e.Message);
+            }
+
+            run();
+        }
+
+        public void handleAddingMember()
+        {
+            string newName = _memberView.enterName();
+            string newPin = _memberView.enterPin();
+
+            Name name = new Name(newName);
+            PersonalIdentification pin = new PersonalIdentification(newPin);
+
+            _members.addMember(new Member(name, pin));
+        }
+
+        public string getMemberList(MemberListTypes listToShow)
+        {
+            return listToShow == MemberListTypes.Compact
+            ? _memberView.getCompactMemberList(_members.MemberList)
+            : _memberView.getVerboseMemberList(_members.MemberList);
+        }
+        public void handleEditMember()
+        {
+            if (_members.listHasMembers())
+            {
+                _mv.render(_memberView.getCompactMemberList(_members.MemberList));
+
+                int id = _memberView.getMemberById(_members);
+
+                Member member = _members.getMemberById(id);
+                member.Name = new Name(_memberView.enterName());
+                member.Pin = new PersonalIdentification(_memberView.enterPin());
+            }
+        }
+
+        public void handleRemovingMembers()
+        {
+            if (_members.listHasMembers())
+            {
+                _mv.render(_memberView.getCompactMemberList(_members.MemberList));
+
+                int id = _memberView.getMemberById(_members);
+                _members.deleteMember(id);
+                _memberView.printRemovedMember();
+            }
+            else
+            {
+                _memberView.printNoUsersFound();
+            }
+        }
+
+        public void handleRemovingBoats()
+        {
+            if (_members.listHasMembers())
+            {
+                _mv.render(_memberView.getCompactMemberList(_members.MemberList));
+
+                int id = _memberView.getMemberById(_members);
+
+                Member m = _members.getMemberById(id);
+
+                if (m.Boats.Count >= 1)
+                {
+                    deleteBoat(id);
+                    _bv.printRemovedBoat();
+                }
+                else
+                {
+                    _bv.printNoBoatsFound();
+                }
+
+            }
+            else
+            {
+                _memberView.printNoUsersFound();
+            }
+        }
+
+        public void handleEditBoat()
+        {
+            if (_members.listHasMembers())
+            {
+                _mv.render(_memberView.getCompactMemberList(_members.MemberList));
+                _bv.printChooseMembersBoat();
+
+                int id = _memberView.getMemberById(_members);
+
+                Member m = _members.getMemberById(id);
+
+                if (m.Boats.Count >= 1)
+                {
+                    changeBoatDetails(id);
+                    _bv.printChangedBoat();
+
+                }
+                else
+                {
+                    _bv.printNoBoatsFound();
+                }
+            }
+            else
+            {
+                _memberView.printNoUsersFound();
+            }
+        }
+
+        public void searchForMember()
+        {
+            string nameToSearch = _memberView.enterName();
+            Name name = new Name(nameToSearch);
+
+            if (_members.memberExistsByName(name.Username))
+            {
+                Member member = _members.getMemberByName(name.Username);
+                _mv.render(_memberView.showMemberProfile(member));
+            }
+            else
+            {
+                _memberView.printMemberNotFound();
+                searchForMember();
+            }
+        }
+
+        public void changeBoatDetails(int id)
+        {
+            Member m = _members.getMemberById(id);
+            _mv.render(_bv.showMembersBoats(m.Boats));
+
+            int boatId = _bv.getBoatId(m);
+            Boat boat = m.getBoatById(boatId);
+            _mv.render(_bv.showBoatTypes());
+
+            int type = _bv.getBoatType();
+            double length = _bv.askForBoatLength();
+            boat.Length = length;
+            boat.Type = (BoatTypes)type;
+        }
+
+        public void shouldAddBoat()
+        {
+            AssignBoatMenu choice = _bv.getWhichMemberToAssignABoat();
+            int memberId = 0;
+
+            if (choice == AssignBoatMenu.Select)
+            {
+                _mv.render(_memberView.getCompactMemberList(_members.MemberList));
+                memberId = _memberView.getMemberById(_members);
+            }
+            else if (choice == AssignBoatMenu.Search)
+            {
+                memberId = getMemberName();
+            }
+
+            _mv.render(_bv.showBoatTypes());
+            int type = _bv.getBoatType();
+            double length = _bv.askForBoatLength();
+
+            Boat boat = new Boat((BoatTypes)type, length, memberId);
+            Member m = _members.getMemberById(memberId);
+            m.addBoat(boat);
+            _mv.render(_bv.showBoatInfo(boat));
+        }
+
+        public int getMemberName()
+        {
+            Name name = new Name(_memberView.enterName());
+            int uniqueId = 0;
+
+            if (_members.memberExistsByName(name.Username))
+            {
+                Member member = _members.getMemberByName(name.Username);
+                uniqueId = member.UniqueId;
+                return uniqueId;
+            }
+            else
+            {
+                _memberView.printMemberNotFound();
+                getMemberName();
+            }
+            return uniqueId;
+        }
+
+        public void deleteBoat(int memberId)
+        {
+            Member member = _members.getMemberById(memberId);
+            _mv.render(_memberView.getMemberBoats(member));
+            int id = _bv.getBoatId(member);
+            member.removeBoat(id);
+        }
     }
-    public void run()
-    {
-      int choice = 0;
-
-      try
-      {
-        choice = _mv.showMenu();
-      }
-      catch (Exception e)
-      {
-        _mv.printMessage(e.Message);
-      }
-
-      try
-      {
-        if (choice == 1)
-        {
-          // Add member
-          handleAddingMember();
-          _mv.printMessage("Successfully added a new member");
-
-        }
-        else if (choice == 2)
-        {
-          // View all members
-          int listToShow = tryToViewMembers();
-          _mv.render(getMemberList(listToShow));
-        }
-        else if (choice == 3)
-        {
-          // Remove a member
-          handleRemovingMembers();
-        }
-        else if (choice == 4)
-        {
-          // Edit a member
-          handleEditMember();
-          _mv.printMessage("The member has been edited");
-        }
-        else if (choice == 5)
-        {
-          // Search a member
-          Name name = getName();
-          searchForMember(name.Username);
-        }
-        else if (choice == 6)
-        {
-          // Add a boat
-          shouldAddBoat();
-          _mv.printMessage("Successfully added boat");
-        }
-        else if (choice == 7)
-        {
-          // Remove a boat
-          handleRemovingBoats();
-        }
-        else if (choice == 8)
-        {
-          // Change boat details
-          handleEditBoat();
-
-        }
-        else if (choice == 9)
-        {
-          // Save and Exit
-          _storage.saveToJson(_members.MemberList);
-          Environment.Exit(0);
-        }
-      }
-      catch (Exception e)
-      {
-        _mv.printMessage(e.Message);
-      }
-
-      run();
-    }
-
-    public void handleAddingMember()
-    {
-      Name newName = getName();
-      PersonalIdentification newPin = getPin();
-      _members.addMember(new Member(newName, newPin));
-    }
-
-    public int tryToViewMembers()
-    {
-      while (true)
-      {
-        try
-        {
-          int selection = _mv.renderMemberListType();
-          return validateMenuChoice(selection, 1, 2); // Validate that user submits 1 or 2
-        }
-        catch (Exception e)
-        {
-          _mv.printMessage(e.Message);
-        }
-
-      }
-    }
-
-    public string getMemberList(int listToShow)
-    {
-      if (listToShow == 1)
-      {
-        return _mv.getCompactMemberList(_members.MemberList);
-      }
-      else
-      {
-        return _mv.getVerboseMemberList(_members.MemberList);
-      }
-    }
-
-    public int validateMemberId()
-    {
-      while (true)
-      {
-        try
-        {
-          int answer = _mv.getMemberById();
-          bool memberExists = _members.memberExistsById(answer);
-          if (memberExists)
-          {
-            return answer;
-          }
-          else
-          {
-            throw new IndexOutOfRangeException("Member not found");
-          }
-        }
-        catch (Exception e)
-        {
-          _mv.printMessage(e.Message);
-        }
-      }
-    }
-
-    public void handleEditMember()
-    {
-      if (_members.listHasMembers())
-      {
-        _mv.render(_mv.getCompactMemberList(_members.MemberList));
-
-        int id = validateMemberId();
-        Member member = _members.getMemberById(id);
-        member.Name = getName();
-        member.Pin = getPin();
-      }
-    }
-
-    public void handleRemovingMembers()
-    {
-      if (_members.listHasMembers())
-      {
-        _mv.render(_mv.getCompactMemberList(_members.MemberList));
-
-        int id = validateMemberId();
-        _members.deleteMember(id);
-        _mv.printMessage("Successfully removed member");
-      }
-      else
-      {
-        _mv.printMessage("No users found");
-      }
-    }
-
-    public void handleRemovingBoats()
-    {
-      if (_members.listHasMembers())
-      {
-        _mv.render(_mv.getCompactMemberList(_members.MemberList));
-
-        int id = validateMemberId();
-        deleteBoat(id);
-        _mv.printMessage("Successfully removed boat");
-      }
-      else
-      {
-        _mv.printMessage("No users found");
-      }
-    }
-
-    public void handleEditBoat()
-    {
-      if (_members.listHasMembers())
-      {
-        _mv.render(_mv.getCompactMemberList(_members.MemberList));
-        _mv.printMessage("Choose the member which boat(s) you want to edit");
-
-        int id = validateMemberId();
-        changeBoatDetails(id);
-        _mv.printMessage("Boat successfully changed");
-      }
-      else
-      {
-        _mv.printMessage("No users found");
-      }
-    }
-
-    public Name getName()
-    {
-      while (true)
-      {
-        try
-        {
-
-          string name = _mv.enterName();
-          if (name.Length >= 3 && name.Length <= 15)
-          {
-            Name newName = new Name(name);
-            return newName;
-          }
-          else
-          {
-            throw new ApplicationException("Enter a name between 3 and 15 letters");
-          }
-
-        }
-        catch (Exception e)
-        {
-          _mv.printMessage(e.Message);
-        }
-      }
-    }
-
-    public void searchForMember(string name)
-    {
-      if (_members.memberExistsByName(name))
-      {
-        Member member = _members.getMemberByName(name);
-        _mv.render(_mv.showMemberProfile(member));
-      }
-      else
-      {
-        _mv.printMessage("Member not found.");
-      }
-    }
-
-    public void changeBoatDetails(int id)
-    {
-      Member m = _members.getMemberById(id);
-      _mv.render(_mv.showMembersBoats(m.Boats));
-
-      int boatId = validateBoatId(m);
-      Boat boat = m.getBoatById(boatId);
-      _mv.render(_mv.showBoatTypes());
-
-      int type = validateBoatType();
-      double length = validateBoatLength();
-      boat.Length = length;
-      boat.Type = (BoatTypes)type;
-    }
-
-    public void shouldAddBoat()
-    {
-      try
-      {
-        int number = listOrName();
-        int memberId = getMemberId(number);
-        _mv.render(_mv.showBoatTypes());
-        int type = validateBoatType();
-        double length = validateBoatLength();
-
-        Boat boat = new Boat((BoatTypes)type, length, memberId);
-        Member m = _members.getMemberById(memberId);
-        m.addBoat(boat);
-        _mv.render(_mv.showBoatInfo(boat));
-      }
-      catch (Exception e)
-      {
-        _mv.printMessage(e.Message);
-      }
-    }
-
-    public int getMemberId(int number)
-    {
-
-      if (number == 1)
-      {
-        _mv.render(_mv.getCompactMemberList(_members.MemberList));
-        return validateMemberId();
-      }
-      else
-      {
-        return getMemberName();
-      }
-    }
-
-    public int getMemberName()
-    {
-      while (true)
-      {
-        try
-        {
-          Name name = getName();
-          if (_members.memberExistsByName(name.Username))
-          {
-            Member member = _members.getMemberByName(name.Username);
-            return member.UniqueId;
-          }
-          else
-          {
-            throw new IndexOutOfRangeException("Member not found");
-          }
-        }
-        catch (Exception e)
-        {
-          _mv.printMessage(e.Message);
-        }
-      }
-    }
-
-    public int validateBoatType()
-    {
-
-      while (true)
-      {
-        int type = _mv.getBoatType();
-        bool exists = Enum.IsDefined(typeof(BoatTypes), type);
-
-        if (exists)
-        {
-          return type;
-        }
-        else
-        {
-          _mv.printMessage("Not a valid boat type");
-        }
-      }
-    }
-
-    public double validateBoatLength()
-    {
-      while (true)
-      {
-        try
-        {
-          double length = _mv.askForBoatLength();
-          return isBoatLengthValid(length);
-        }
-        catch (Exception e)
-        {
-          _mv.printMessage(e.Message);
-        }
-
-      }
-
-    }
-
-    public int listOrName()
-    {
-      while (true)
-      {
-        try
-        {
-          int ch = _mv.getWhichMemberToAssignABoat();
-          return validateMenuChoice(ch, 1, 2);
-        }
-        catch (Exception e)
-        {
-          _mv.printMessage(e.Message);
-        }
-      }
-    }
-
-    public PersonalIdentification getPin()
-    {
-      while (true)
-      {
-        try
-        {
-          string pin = _mv.enterPin();
-          if (pin.Length != 10)
-          {
-            throw new Exception("The personal identification number should only be 10 numbers");
-          }
-          else
-          {
-            return new PersonalIdentification(pin);
-          }
-        }
-        catch (Exception e)
-        {
-          _mv.printMessage(e.Message);
-        }
-      }
-    }
-
-
-
-    public void deleteBoat(int memberId)
-    {
-      Member member = _members.getMemberById(memberId);
-      _mv.render(_mv.getMemberBoats(member));
-      int id = validateBoatId(member);
-      member.removeBoat(id);
-    }
-
-    public int validateBoatId(Member member)
-    {
-      while (true)
-      {
-        try
-        {
-          int id = _mv.getBoatId();
-
-          if (member.boatExists(id))
-          {
-            return id;
-          }
-          else
-          {
-            throw new Exception("Boat not found");
-          }
-        }
-        catch (Exception e)
-        {
-          _mv.printMessage(e.Message);
-        }
-      }
-    }
-
-    public int validateMenuChoice(int choice, int min, int max)
-    {
-      if (!(choice < min || choice > max))
-      {
-        return choice;
-      }
-      else
-      {
-        throw new ApplicationException("Not a valid value");
-      }
-    }
-    public double isBoatLengthValid(double length)
-    {
-      if (!(length < 1 || length > 20))
-      {
-        return length;
-      }
-      else
-      {
-        throw new ApplicationException("Not a valid length. Minimum length: 1 meter. Max length: 20 meter.");
-      }
-    }
-  }
 }
