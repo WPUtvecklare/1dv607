@@ -100,7 +100,7 @@ namespace application
                 throw new ApplicationException("No members to show");
             }
 
-            foreach (var member in memberList)
+            foreach (Member member in memberList)
             {
                 output += $"\nName: {member.Name.Username} Personal number: {member.Pin.Pin} Member ID: {member.UniqueId} Boats: {getMemberBoats(member)} ";
             }
@@ -117,7 +117,7 @@ namespace application
             }
             else
             {
-                foreach (var member in memberList)
+                foreach (Member member in memberList)
                 {
                     output += $"\nName: {member.Name.Username} Member ID: {member.UniqueId} Boats: {member.Boats.Count}";
                 }
@@ -139,7 +139,7 @@ namespace application
         {
             string output = "";
 
-            foreach (var boat in member.Boats)
+            foreach (Boat boat in member.Boats)
             {
                 output += $"\nType: {boat.Type} \nLength: {boat.Length} \nID: {boat.UniqueId}\n";
             }

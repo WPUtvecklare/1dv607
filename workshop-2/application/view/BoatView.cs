@@ -12,7 +12,7 @@ namespace application
         {
             string output = "";
 
-            foreach (var boat in boats)
+            foreach (Boat boat in boats)
             {
                 output += $"\nType: {boat.Type} \nLength: {boat.Length} \nID: {boat.UniqueId}\n";
             }
@@ -98,7 +98,7 @@ namespace application
         public string showBoatTypes()
         {
             string types = "";
-            foreach (var type in Enum.GetValues(typeof(BoatTypes)))
+            foreach (BoatTypes type in Enum.GetValues(typeof(BoatTypes)))
             {
                 types += $"\n {(int)type}. {type}";
             }
