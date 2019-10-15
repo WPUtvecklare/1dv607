@@ -6,18 +6,18 @@ using System.Collections.ObjectModel;
 
 namespace application
 {
-  class Storage
-  {
-    public void saveToJson(ReadOnlyCollection<Member> memberList)
+    class Storage
     {
-      File.WriteAllText("AppData/memberList.json", JsonConvert.SerializeObject(memberList, Formatting.Indented));
-    }
+        public void saveToJson<T>(ReadOnlyCollection<T> memberList)
+        {
+            File.WriteAllText("AppData/memberList.json", JsonConvert.SerializeObject(memberList, Formatting.Indented));
+        }
 
-    public List<Member> loadUsers()
-    {
-      string json = File.ReadAllText("AppData/memberList.json");
-      List<Member> members = JsonConvert.DeserializeObject<List<Member>>(json);
-      return members;
+        public List<T> loadUsers<T>()
+        {
+            string json = File.ReadAllText("AppData/memberList.json");
+            List<T> members = JsonConvert.DeserializeObject<List<T>>(json);
+            return members;
+        }
     }
-  }
 }

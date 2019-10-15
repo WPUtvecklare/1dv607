@@ -6,20 +6,36 @@ namespace application
 {
     class Members
     {
+        private Storage _storage;
         private List<Member> _memberList = new List<Member>();
-
         public ReadOnlyCollection<Member> MemberList { get => new ReadOnlyCollection<Member>(_memberList); }
 
         public Members(Storage storage)
         {
-            if (storage.loadUsers() != null)
+            _storage = storage;
+
+            if (storage.loadUsers<Member>() != null)
             {
-                _memberList = storage.loadUsers();
+                _memberList = storage.loadUsers<Member>();
             }
         }
-        public void addMember(Member member)
+        public void addMember(string name, string pin)
         {
+            Member member = new Member(new Name(name), new PersonalIdentification(pin));
             _memberList.Add(member);
+        }
+
+        public void updateMember(int id, string name, string pin)
+        {
+            Member member = getMemberById(id);
+            member.Name = new Name(name);
+            member.Pin = new PersonalIdentification(pin);
+        }
+
+        public void addBoatToMember(int id, int type, double length)
+        {
+            Member member = getMemberById(id);
+            member.addBoat(type, length, id);
         }
 
         public void deleteMember(int memberId)
@@ -52,5 +68,10 @@ namespace application
         }
 
         public bool listHasMembers() => _memberList.Count == 0 ? false : true;
+
+        public void saveMembers()
+        {
+            _storage.saveToJson(MemberList);
+        }
     }
 }

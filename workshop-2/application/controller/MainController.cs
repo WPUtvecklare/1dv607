@@ -8,15 +8,13 @@ namespace application
         private BoatView _bv;
         private MemberView _memberView;
         private Members _members;
-        private Storage _storage;
 
-        public MainController()
+        public MainController(Members members, MainView mv, BoatView bv, MemberView memberView)
         {
-            _storage = new Storage();
-            _members = new Members(_storage);
-            _mv = new MainView();
-            _bv = new BoatView();
-            _memberView = new MemberView();
+            _members = members;
+            _mv = mv;
+            _bv = bv;
+            _memberView = memberView;
         }
         public void run()
         {
@@ -29,13 +27,11 @@ namespace application
                 {
                     // Add member
                     handleAddingMember();
-                    _memberView.printAddedNewMember();
                 }
                 else if (choice == MainMenu.ViewMembers)
                 {
                     // View all members
-                    MemberListTypes list = _memberView.renderMemberListType();
-                    _mv.render(getMemberList(list));
+                    handleViewingMembers();
                 }
                 else if (choice == MainMenu.RemoveMember)
                 {
@@ -46,7 +42,6 @@ namespace application
                 {
                     // Edit a member
                     handleEditMember();
-                    _memberView.printMemberHasBeenEdited();
                 }
                 else if (choice == MainMenu.SearchMember)
                 {
@@ -57,7 +52,6 @@ namespace application
                 {
                     // Add a boat
                     shouldAddBoat();
-                    _bv.printAddedBoat();
                 }
                 else if (choice == MainMenu.RemoveBoat)
                 {
@@ -72,7 +66,7 @@ namespace application
                 else if (choice == MainMenu.SaveExit)
                 {
                     // Save and Exit
-                    _storage.saveToJson(_members.MemberList);
+                    _members.saveMembers();
                     Environment.Exit(0);
                 }
             }
@@ -85,13 +79,16 @@ namespace application
 
         public void handleAddingMember()
         {
-            string newName = _memberView.enterName();
-            string newPin = _memberView.enterPin();
+            string name = _memberView.enterName();
+            string pin = _memberView.enterPin();
+            _members.addMember(name, pin);
+            _memberView.printAddedNewMember();
+        }
 
-            Name name = new Name(newName);
-            PersonalIdentification pin = new PersonalIdentification(newPin);
-
-            _members.addMember(new Member(name, pin));
+        public void handleViewingMembers()
+        {
+            MemberListTypes list = _memberView.renderMemberListType();
+            _mv.render(getMemberList(list));
         }
 
         public string getMemberList(MemberListTypes listToShow)
@@ -107,11 +104,13 @@ namespace application
                 _mv.render(_memberView.getCompactMemberList(_members.MemberList));
 
                 int id = _memberView.getMemberById(_members);
+                string name = _memberView.enterName();
+                string pin = _memberView.enterPin();
 
-                Member member = _members.getMemberById(id);
-                member.Name = new Name(_memberView.enterName());
-                member.Pin = new PersonalIdentification(_memberView.enterPin());
+                _members.updateMember(id, name, pin);
+                _memberView.printMemberHasBeenEdited();
             }
+
         }
 
         public void handleRemovingMembers()
@@ -140,7 +139,7 @@ namespace application
 
                 Member m = _members.getMemberById(id);
 
-                if (m.Boats.Count >= 1)
+                if (m.getMemberBoats().Count >= 1)
                 {
                     deleteBoat(id);
                     _bv.printRemovedBoat();
@@ -167,7 +166,7 @@ namespace application
 
                 Member m = _members.getMemberById(id);
 
-                if (m.Boats.Count >= 1)
+                if (m.getMemberBoats().Count >= 1)
                 {
                     changeBoatDetails(id);
                     _bv.printChangedBoat();
@@ -186,11 +185,10 @@ namespace application
         public void searchForMember()
         {
             string nameToSearch = _memberView.enterName();
-            Name name = new Name(nameToSearch);
 
-            if (_members.memberExistsByName(name.Username))
+            if (_members.memberExistsByName(nameToSearch))
             {
-                Member member = _members.getMemberByName(name.Username);
+                Member member = _members.getMemberByName(nameToSearch);
                 _mv.render(_memberView.showMemberProfile(member));
             }
             else
@@ -203,16 +201,15 @@ namespace application
         public void changeBoatDetails(int id)
         {
             Member m = _members.getMemberById(id);
-            _mv.render(_bv.showMembersBoats(m.Boats));
-
+            _mv.render(_bv.showMembersBoats(m.getMemberBoats()));
             int boatId = _bv.getBoatId(m);
-            Boat boat = m.getBoatById(boatId);
+
             _mv.render(_bv.showBoatTypes());
 
             int type = _bv.getBoatType();
             double length = _bv.askForBoatLength();
-            boat.Length = length;
-            boat.Type = (BoatTypes)type;
+
+            m.editBoat(boatId, type, length);
         }
 
         public void shouldAddBoat()
@@ -234,20 +231,19 @@ namespace application
             int type = _bv.getBoatType();
             double length = _bv.askForBoatLength();
 
-            Boat boat = new Boat((BoatTypes)type, length, memberId);
-            Member m = _members.getMemberById(memberId);
-            m.addBoat(boat);
-            _mv.render(_bv.showBoatInfo(boat));
+            _members.addBoatToMember(memberId, type, length);
+
+            _bv.printAddedBoat();
         }
 
         public int getMemberName()
         {
-            Name name = new Name(_memberView.enterName());
+            string name = _memberView.enterName();
             int uniqueId = 0;
 
-            if (_members.memberExistsByName(name.Username))
+            if (_members.memberExistsByName(name))
             {
-                Member member = _members.getMemberByName(name.Username);
+                Member member = _members.getMemberByName(name);
                 uniqueId = member.UniqueId;
                 return uniqueId;
             }

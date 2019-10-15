@@ -5,8 +5,8 @@ namespace application
 {
     class BoatView : MainView
     {
-        private int minimumBoatLength = 1;
-        private int maximumBoatLength = 20;
+        private int minLength = 1;
+        private int maxLength = 20;
 
         public string showMembersBoats(List<Boat> boats)
         {
@@ -57,16 +57,16 @@ namespace application
         {
             while (true)
             {
-                Console.Write($"Enter boat length in meter (max {maximumBoatLength}): ");
+                Console.Write($"Enter boat length in meter (max {maxLength}): ");
                 double answer = double.Parse(Console.ReadLine());
 
-                if (answer >= minimumBoatLength && answer <= maximumBoatLength)
+                if (answer >= minLength && answer <= maxLength)
                 {
                     return answer;
                 }
                 else
                 {
-                    printMessage($"Not a valid length. Minimum length: {minimumBoatLength} meter. Max length: {maximumBoatLength} meter.");
+                    printMessage($"Not a valid length. Minimum length: {minLength} meter. Max length: {maxLength} meter.");
                 }
             }
         }

@@ -6,8 +6,8 @@ namespace application
 {
     class MemberView : MainView
     {
-        private int minimumNameLength = 3;
-        private int maximumNameLength = 15;
+        private int minLength = 3;
+        private int maxLength = 15;
 
         public string enterName()
         {
@@ -16,7 +16,7 @@ namespace application
                 Console.Write("Enter name: ");
                 string newName = Console.ReadLine();
 
-                if (newName.Length >= minimumNameLength && newName.Length <= maximumNameLength)
+                if (newName.Length >= minLength && newName.Length <= maxLength)
                 {
                     return newName;
                 }
@@ -102,7 +102,7 @@ namespace application
 
             foreach (Member member in memberList)
             {
-                output += $"\nName: {member.Name.Username} Personal number: {member.Pin.Pin} Member ID: {member.UniqueId} Boats: {getMemberBoats(member)} ";
+                output += $"\nName: {member.getName()} Personal number: {member.getPin()} Member ID: {member.UniqueId} Boats: {getMemberBoats(member)} ";
             }
             return output;
         }
@@ -119,7 +119,7 @@ namespace application
             {
                 foreach (Member member in memberList)
                 {
-                    output += $"\nName: {member.Name.Username} Member ID: {member.UniqueId} Boats: {member.Boats.Count}";
+                    output += $"\nName: {member.getName()} Member ID: {member.UniqueId} Boats: {member.getMemberBoats().Count}";
                 }
                 return output;
             }
@@ -127,12 +127,12 @@ namespace application
 
         public string showMemberProfile(Member member)
         {
-            return $"Name: {member.Name.Username} Personal ID: {member.Pin.Pin} Boats: {member.Boats.Count}";
+            return $"Name: {member.getName()} Personal ID: {member.getPin()} Boats: {member.getMemberBoats().Count}";
         }
 
         public string showMember(Member member)
         {
-            return $"Name: {member.Name.Username} Personal ID: {member.Pin.Pin} ";
+            return $"Name: {member.getName()} Personal ID: {member.getPin()} ";
         }
 
         public string getMemberBoats(Member member)

@@ -1,16 +1,16 @@
 [
   {
     "Name": {
-      "Username": "LOOP"
+      "Username": "Plopp"
     },
     "Pin": {
-      "Pin": "9090909090"
+      "Pin": "1010101010"
     },
-    "UniqueId": 44486315,
+    "UniqueId": 23599335,
     "Boats": [
       {
-        "Type": 1,
-        "Length": 20.0,
+        "Type": 3,
+        "Length": 5.0,
         "OwnerId": 58963067,
         "UniqueId": 37561064
       },
@@ -29,7 +29,17 @@
     "Pin": {
       "Pin": "0987654321"
     },
-    "UniqueId": 56205491,
+    "UniqueId": 36509557,
+    "Boats": []
+  },
+  {
+    "Name": {
+      "Username": "aaa"
+    },
+    "Pin": {
+      "Pin": "1919191919"
+    },
+    "UniqueId": 29297286,
     "Boats": []
   }
 ]

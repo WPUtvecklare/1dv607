@@ -31,7 +31,7 @@ namespace application
             _uniqueId = rnd.Next(10000000, 99999999);
         }
 
-        public void addBoat(Boat boat) => _boats.Add(boat);
+        public void addBoat(int type, double length, int memberId) => _boats.Add(new Boat((BoatTypes)type, length, memberId));
 
         public void removeBoat(int id) => _boats.RemoveAll(b => b.UniqueId == id);
 
@@ -43,5 +43,21 @@ namespace application
             Boat boat = _boats.Find(m => m.UniqueId == id);
             return boat == null ? false : true;
         }
+
+        public void editBoat(int id, int type, double length)
+        {
+            Boat boat = getBoatById(id);
+            boat.Length = length;
+            boat.Type = (BoatTypes)type;
+        }
+
+        public List<Boat> getMemberBoats()
+        {
+            return Boats;
+        }
+
+        public string getName() => _name.Username;
+
+        public string getPin() => _pin.Pin;
     }
 }
