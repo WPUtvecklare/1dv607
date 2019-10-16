@@ -119,7 +119,7 @@ namespace application
             {
                 foreach (Member member in memberList)
                 {
-                    output += $"\nName: {member.getName()} Member ID: {member.UniqueId} Boats: {member.getMemberBoats().Count}";
+                    output += $"\nName: {member.getName()} Member ID: {member.UniqueId} Boats: {member.Boats.Count}";
                 }
                 return output;
             }
@@ -127,7 +127,7 @@ namespace application
 
         public string showMemberProfile(Member member)
         {
-            return $"Name: {member.getName()} Personal ID: {member.getPin()} Boats: {member.getMemberBoats().Count}";
+            return $"Name: {member.getName()} Personal ID: {member.getPin()} Boats: {member.Boats.Count}";
         }
 
         public string showMember(Member member)

@@ -1,10 +1,10 @@
 [
   {
     "Name": {
-      "Username": "Plopp"
+      "Username": "Niklas"
     },
     "Pin": {
-      "Pin": "1010101010"
+      "Pin": "8701011010"
     },
     "UniqueId": 23599335,
     "Boats": [
@@ -24,22 +24,12 @@
   },
   {
     "Name": {
-      "Username": "fgyuhstj"
+      "Username": "Adam"
     },
     "Pin": {
-      "Pin": "0987654321"
+      "Pin": "9501011010"
     },
     "UniqueId": 36509557,
-    "Boats": []
-  },
-  {
-    "Name": {
-      "Username": "aaa"
-    },
-    "Pin": {
-      "Pin": "1919191919"
-    },
-    "UniqueId": 29297286,
     "Boats": []
   }
 ]
