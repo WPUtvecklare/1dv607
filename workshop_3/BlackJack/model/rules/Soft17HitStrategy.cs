@@ -1,26 +1,23 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace BlackJack.model.rules
 {
-  class Soft17HitStrategy : IHitStrategy
-  {
-    private const int g_hitLimit = 17;
-
-    public bool DoHit(model.Player a_dealer)
+    class Soft17HitStrategy : IHitStrategy
     {
-      List<Card> list = (List<Card>)a_dealer.GetHand();
+        private const int g_hitLimit = 17;
 
-      if (a_dealer.CalcScore() == g_hitLimit)
-      {
-        return list.Exists(x => x.GetValue() == Card.Value.Ace);
-      }
-      else
-      {
-        return a_dealer.CalcScore() < g_hitLimit;
-      }
+        public bool DoHit(model.Player a_dealer)
+        {
+            List<Card> list = (List<Card>)a_dealer.GetHand();
+
+            if (a_dealer.CalcScore() == g_hitLimit)
+            {
+                return list.Exists(x => x.GetValue() == Card.Value.Ace);
+            }
+            else
+            {
+                return a_dealer.CalcScore() < g_hitLimit;
+            }
+        }
     }
-  }
 }
