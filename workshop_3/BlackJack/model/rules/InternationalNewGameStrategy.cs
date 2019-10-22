@@ -5,17 +5,17 @@ using System.Text;
 
 namespace BlackJack.model.rules
 {
-  class InternationalNewGameStrategy : INewGameStrategy
-  {
-
-    public bool NewGame(Deck a_deck, Dealer a_dealer, Player a_player)
+    class InternationalNewGameStrategy : INewGameStrategy
     {
-      bool showCard = true;
-      a_dealer.Deal(a_player, showCard, a_deck.GetCard());
-      a_dealer.Deal(a_dealer, showCard, a_deck.GetCard());
-      a_dealer.Deal(a_player, showCard, a_deck.GetCard());
 
-      return true;
+        public bool NewGame(Dealer a_dealer, Player a_player)
+        {
+            bool showCard = true;
+            a_dealer.Deal(a_player, showCard);
+            a_dealer.Deal(a_dealer, showCard);
+            a_dealer.Deal(a_player, showCard);
+
+            return true;
+        }
     }
-  }
 }
